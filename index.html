@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1850, height=980">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Debug Task 6: Bubble Sort</title>
     <style>
         * {
@@ -12,32 +12,32 @@
         }
 
         html, body {
-            width: 1920px;
-            height: 980px;
-            overflow: hidden;
+            width: 100%;
+            min-height: 100vh;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f8f9fa;
             padding: 20px;
+            padding-bottom: 80px; /* Space for Next button */
         }
         
         .debug-container {
-            width: 1880px;
-            height: 880px; /* 980 - 40px padding - 60px for Next button */
+            width: 100%;
+            min-height: calc(100vh - 100px);
         }
         
         .three-columns {
             display: flex;
             gap: 20px;
-            width: 1880px;
-            height: 880px;
+            min-height: 750px; /* Minimum height to show all content */
+            height: calc(100vh - 100px);
         }
         
         .panel {
-            width: 613px; /* (1880 - 40px gaps) / 3 */
-            height: 880px;
+            flex: 1;
+            min-width: 380px; /* Minimum width per panel */
             background: #ffffff;
             padding: 24px;
             border-radius: 12px;
@@ -48,7 +48,6 @@
         }
         
         .panel-header {
-            height: 70px;
             margin-bottom: 20px;
             padding-bottom: 14px;
             border-bottom: 4px solid;
@@ -73,14 +72,14 @@
         .panel-title.code { color: #667eea; }
         
         .panel-title .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 36px;
             height: 36px;
             border-radius: 8px;
             color: white;
             font-size: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
         
         .panel-title.flowchart .icon { background: linear-gradient(135deg, #3182ce, #2b6cb0); }
@@ -94,17 +93,17 @@
         }
         
         .panel-content {
-            width: 565px; /* 613 - 48px padding */
-            height: 742px; /* 880 - 48px padding - 70px header - 20px margin */
+            flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow: auto; /* Allow scroll if needed */
+            min-height: 0;
         }
         
-        /* FLOWCHART - auto fit, no scroll */
+        /* FLOWCHART */
         .flowchart-container {
-            width: 565px;
-            height: 742px;
+            flex: 1;
+            min-height: 600px; /* Minimum height for flowchart */
             background: #f7fafc;
             border-radius: 10px;
             border: 1px solid #e2e8f0;
@@ -112,27 +111,32 @@
             justify-content: center;
             align-items: center;
             padding: 10px;
-            overflow: hidden;
+            overflow: auto;
         }
         
         .flowchart-container svg {
-            max-width: 545px;
-            max-height: 722px;
+            min-width: 350px;
+            min-height: 580px;
+            width: 100%;
+            height: 100%;
         }
         
-        /* PROMPT - scroll enabled */
+        /* PROMPT */
         .prompt-content {
-            width: 565px;
-            height: 742px;
+            flex: 1;
+            min-height: 500px;
             background: #f0fff4;
             border: 2px solid #9ae6b4;
             border-radius: 10px;
             padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             overflow: auto;
         }
         
         .prompt-text {
-            font-size: 22px;
+            font-size: 19px;
             color: #2d3748;
             line-height: 1.8;
             text-align: justify;
@@ -154,21 +158,24 @@
             white-space: nowrap;
         }
         
-        /* CODE - scroll enabled */
+        /* CODE */
         .code-wrapper {
-            width: 565px;
-            height: 742px;
+            flex: 1;
+            min-height: 500px;
             background: #f7fafc;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
             overflow: auto;
         }
         
         .code-block {
             font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 18px;
-            line-height: 1.9;
+            font-size: 14px;
+            line-height: 2;
             color: #2d3748;
         }
         
@@ -194,6 +201,41 @@
         .code-number { color: #d53f8c; font-weight: 600; }
         .code-function { color: #3182ce; font-weight: 600; }
         .code-comment { color: #38a169; font-style: italic; }
+
+        /* RESPONSIVE: Small screens */
+        @media (max-width: 1400px) {
+            .panel {
+                min-width: 320px;
+            }
+            .code-block {
+                font-size: 13px;
+            }
+            .prompt-text {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .three-columns {
+                flex-wrap: wrap;
+                height: auto;
+            }
+            .panel {
+                flex: 1 1 calc(50% - 20px);
+                min-height: 500px;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .three-columns {
+                flex-direction: column;
+            }
+            .panel {
+                flex: none;
+                width: 100%;
+                min-height: 450px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -211,7 +253,7 @@
                 
                 <div class="panel-content">
                     <div class="flowchart-container">
-                        <svg viewBox="-80 0 520 820" xmlns="http://www.w3.org/2000/svg">
+                        <svg viewBox="-80 0 520 820" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                             <defs>
                                 <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                                     <path d="M 0 0 L 10 5 L 0 10 z" fill="#4a5568"/>
