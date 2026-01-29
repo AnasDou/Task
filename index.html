@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1920, height=980">
     <title>Debug Task 6: Bubble Sort</title>
     <style>
         * {
@@ -12,8 +12,8 @@
         }
 
         html, body {
-            width: 100vw;
-            height: 100vh;
+            width: 1920px;
+            height: 980px;
             overflow: hidden;
         }
 
@@ -24,18 +24,20 @@
         }
         
         .debug-container {
-            width: calc(100vw - 40px);
-            height: calc(100vh - 40px);
+            width: 1880px;
+            height: 880px; /* 980 - 40px padding - 60px for Next button */
         }
         
         .three-columns {
             display: flex;
             gap: 20px;
-            height: 100%;
+            width: 1880px;
+            height: 880px;
         }
         
         .panel {
-            flex: 1;
+            width: 613px; /* (1880 - 40px gaps) / 3 */
+            height: 880px;
             background: #ffffff;
             padding: 24px;
             border-radius: 12px;
@@ -46,6 +48,7 @@
         }
         
         .panel-header {
+            height: 70px;
             margin-bottom: 20px;
             padding-bottom: 14px;
             border-bottom: 4px solid;
@@ -70,14 +73,14 @@
         .panel-title.code { color: #667eea; }
         
         .panel-title .icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             width: 36px;
             height: 36px;
             border-radius: 8px;
             color: white;
             font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .panel-title.flowchart .icon { background: linear-gradient(135deg, #3182ce, #2b6cb0); }
@@ -91,15 +94,17 @@
         }
         
         .panel-content {
-            flex: 1;
+            width: 565px; /* 613 - 48px padding */
+            height: 742px; /* 880 - 48px padding - 70px header - 20px margin */
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            min-height: 0;
         }
         
+        /* FLOWCHART - auto fit, no scroll */
         .flowchart-container {
-            flex: 1;
+            width: 565px;
+            height: 742px;
             background: #f7fafc;
             border-radius: 10px;
             border: 1px solid #e2e8f0;
@@ -111,26 +116,23 @@
         }
         
         .flowchart-container svg {
-            max-width: 100%;
-            max-height: 100%;
-            width: auto;
-            height: auto;
+            max-width: 545px;
+            max-height: 722px;
         }
         
+        /* PROMPT - scroll enabled */
         .prompt-content {
-            flex: 1;
+            width: 565px;
+            height: 742px;
             background: #f0fff4;
             border: 2px solid #9ae6b4;
             border-radius: 10px;
             padding: 28px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow: hidden;
+            overflow: auto;
         }
         
         .prompt-text {
-            font-size: 16px;
+            font-size: 22px;
             color: #2d3748;
             line-height: 1.8;
             text-align: justify;
@@ -149,23 +151,23 @@
             padding: 2px 8px;
             border-radius: 4px;
             font-weight: 600;
+            white-space: nowrap;
         }
         
+        /* CODE - scroll enabled */
         .code-wrapper {
-            flex: 1;
+            width: 565px;
+            height: 742px;
             background: #f7fafc;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
-            overflow: hidden;
+            overflow: auto;
         }
         
         .code-block {
             font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 20px;
+            font-size: 18px;
             line-height: 1.9;
             color: #2d3748;
         }
