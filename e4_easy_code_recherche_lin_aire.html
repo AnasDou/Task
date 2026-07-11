@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=1920, height=980"><title>E4 · Recherche linéaire — Énoncé vs Code</title><style>
-:root{--tfs:18.0px;--tlh:3.2;--clh:3.0;}
+:root{--tfs:30.0px;--tlh:3.2;--clh:3.0;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:1920px;height:980px;overflow:hidden;}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#eef2f7;}
@@ -24,7 +24,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#eef2f7;
 .tc{font-size:var(--tfs);color:#1a2733;line-height:var(--tlh);}
 .tc p{margin-bottom:16px;text-align:justify;}
 .tc p:last-child{margin-bottom:0;}
-.hl{background:#c6f6d5;padding:1px 8px;border-radius:4px;font-weight:600;white-space:nowrap;}
+.hl{background:none;padding:0;border-radius:0;font-weight:inherit;white-space:nowrap;}
 .tc strong{color:#0d7557;}.tc em{color:#9c4221;font-style:italic;font-weight:600;}
 
 /* code (right) */
@@ -43,7 +43,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#eef2f7;
           display:flex;justify-content:center;align-items:center;overflow:hidden;padding:18px;}
 .flow-box svg{max-width:100%;max-height:100%;height:100%;}
 </style></head><body><!-- E4 | Recherche linéaire — Énoncé vs Code | INCOHÉRENCE: Code : la boucle va jusqu'à n (hors limites) ; énoncé (correct) s'arrête à n − 1. --><div class="wrap"><div class="panel"><div class="ph text"><div class="pt text"><span class="ic text">&#9776;</span>Énoncé</div><div class="ps">Recherche linéaire</div></div><div class="pb"><div class="text-box"><div class="tc"><p>Écrire une fonction <span class="hl">rechercheLineaire</span> qui reçoit un tableau <span class="hl">tab</span>, sa taille <span class="hl">n</span> et une valeur <span class="hl">cible</span>.</p><p>Parcourir le tableau avec un indice <span class="hl">i</span> allant de <span class="hl">0</span> à <span class="hl">n &minus; 1</span>. Tester si <span class="hl">tab[i]</span> est égal à <span class="hl">cible</span>.</p><p>Si oui, retourner immédiatement l'indice <span class="hl">i</span>. Si la boucle se termine sans trouver la valeur, retourner <span class="hl">&minus;1</span>.</p></div></div></div></div><div class="panel"><div class="ph code"><div class="pt code"><span class="ic code">&lt;/&gt;</span>Code</div><div class="ps">Recherche linéaire</div></div><div class="pb"><div class="code-box"><div class="cb"><span class="cl"><span class="ln">1</span><span class="kw">fonction</span> <span class="fn">rechercheLineaire</span>(<span class="va">tab</span>, <span class="va">n</span>, <span class="va">cible</span>):</span>
-<span class="cl"><span class="ln">2</span>    <span class="kw">pour</span> <span class="va">i</span> <span class="kw">de</span> <span class="nm">0</span> <span class="kw">à</span> <span class="bugc"><span class="va">n</span></span> <span class="kw">faire</span>:   <span class="cm"># BUG : n au lieu de n &minus; 1</span></span>
+<span class="cl"><span class="ln">2</span>    <span class="kw">pour</span> <span class="va">i</span> <span class="kw">de</span> <span class="nm">0</span> <span class="kw">à</span> <span class="bugc"><span class="va">n</span></span> <span class="kw">faire</span>: </span>
 <span class="cl"><span class="ln">3</span>        <span class="kw">si</span> <span class="va">tab</span>[<span class="va">i</span>] <span class="op">==</span> <span class="va">cible</span> <span class="kw">alors</span>:</span>
 <span class="cl"><span class="ln">4</span>            <span class="kw">retourner</span> <span class="va">i</span></span>
 <span class="cl"><span class="ln">5</span>    <span class="kw">retourner</span> <span class="op">&minus;</span><span class="nm">1</span></span>
@@ -52,10 +52,31 @@ html,body{width:100%!important;height:100%!important;margin:0;overflow:hidden!im
 .wrap{position:fixed;left:50%;top:50%;transform-origin:center center;
       transform:translate(-50%,-50%) scale(var(--fit,1));}
 </style>
+<!-- ===== UNIVERSAL FILL — text & code fill their panel (paste before </body>) ===== -->
 <script>
-(function(){function f(){var s=Math.min(window.innerWidth/1920,window.innerHeight/980);
-document.documentElement.style.setProperty('--fit',s);}
-window.addEventListener('resize',f);window.addEventListener('orientationchange',f);
-window.addEventListener('load',f);f();})();
+(function(){
+  function fit(sel){
+    var el = document.querySelector(sel);
+    if(!el) return;                                    // flow tasks have no .cb → skip
+    var box = el.parentElement, cs = getComputedStyle(box);
+    var aw = box.clientWidth  - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var ah = box.clientHeight - parseFloat(cs.paddingTop)  - parseFloat(cs.paddingBottom);
+    // 1) biggest font that fits BOTH width and height
+    var lo=8, hi=60, best=lo;
+    for(var i=0;i<24;i++){ var m=(lo+hi)/2; el.style.fontSize=m+'px';
+      if(el.scrollWidth<=aw+0.5 && el.scrollHeight<=ah+0.5){ best=m; lo=m; } else { hi=m; } }
+    el.style.fontSize = best+'px';
+    // 2) if lines are width-capped and leave vertical gaps, stretch line-height to fill
+    if(el.scrollHeight < ah-1){
+      var lh = parseFloat(getComputedStyle(el).lineHeight) * (ah/el.scrollHeight);
+      el.style.lineHeight = lh+'px';
+      var g=0; while(el.scrollHeight>ah+0.5 && g++<10){ lh*=0.98; el.style.lineHeight=lh+'px'; }
+    }
+  }
+  function fitAll(){ fit('.tc'); fit('.cb'); }
+  window.addEventListener('load', fitAll);
+  window.addEventListener('resize', fitAll);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(fitAll); }
+})();
 </script>
 </body></html>
