@@ -24,7 +24,7 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#eef2f7;
 .tc{font-size:var(--tfs);color:#1a2733;line-height:var(--tlh);}
 .tc p{margin-bottom:16px;text-align:justify;}
 .tc p:last-child{margin-bottom:0;}
-.hl{background:#c6f6d5;padding:1px 8px;border-radius:4px;font-weight:600;white-space:nowrap;}
+.hl{background:none;padding:0;border-radius:0;font-weight:inherit;white-space:nowrap;}
 .tc strong{color:#0d7557;}.tc em{color:#9c4221;font-style:italic;font-weight:600;}
 
 /* code (right) */
@@ -74,10 +74,31 @@ html,body{width:100%!important;height:100%!important;margin:0;overflow:hidden!im
 .wrap{position:fixed;left:50%;top:50%;transform-origin:center center;
       transform:translate(-50%,-50%) scale(var(--fit,1));}
 </style>
+<!-- ===== UNIVERSAL FILL — text & code fill their panel (paste before </body>) ===== -->
 <script>
-(function(){function f(){var s=Math.min(window.innerWidth/1920,window.innerHeight/980);
-document.documentElement.style.setProperty('--fit',s);}
-window.addEventListener('resize',f);window.addEventListener('orientationchange',f);
-window.addEventListener('load',f);f();})();
+(function(){
+  function fit(sel){
+    var el = document.querySelector(sel);
+    if(!el) return;                                    // flow tasks have no .cb → skip
+    var box = el.parentElement, cs = getComputedStyle(box);
+    var aw = box.clientWidth  - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var ah = box.clientHeight - parseFloat(cs.paddingTop)  - parseFloat(cs.paddingBottom);
+    // 1) biggest font that fits BOTH width and height
+    var lo=8, hi=60, best=lo;
+    for(var i=0;i<24;i++){ var m=(lo+hi)/2; el.style.fontSize=m+'px';
+      if(el.scrollWidth<=aw+0.5 && el.scrollHeight<=ah+0.5){ best=m; lo=m; } else { hi=m; } }
+    el.style.fontSize = best+'px';
+    // 2) if lines are width-capped and leave vertical gaps, stretch line-height to fill
+    if(el.scrollHeight < ah-1){
+      var lh = parseFloat(getComputedStyle(el).lineHeight) * (ah/el.scrollHeight);
+      el.style.lineHeight = lh+'px';
+      var g=0; while(el.scrollHeight>ah+0.5 && g++<10){ lh*=0.98; el.style.lineHeight=lh+'px'; }
+    }
+  }
+  function fitAll(){ fit('.tc'); fit('.cb'); }
+  window.addEventListener('load', fitAll);
+  window.addEventListener('resize', fitAll);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(fitAll); }
+})();
 </script>
 </body></html>
